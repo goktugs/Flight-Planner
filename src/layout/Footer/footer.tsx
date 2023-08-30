@@ -10,18 +10,18 @@ import React from "react";
 
 export default function Footer() {
   return (
-    <footer className="flex flex-col bg-main-black space-y-6 text-white container">
-      <div className="text-center">
+    <footer className="flex flex-col bg-main-black space-y-6 text-white md:px-20 md:flex-row pt-4 pb-8  ">
+      <div className="text-center md:flex-1 md:text-left md:mt-6 ">
         <h4>Tripper</h4>
         <div className="flex flex-col space-y-2">
           <p>117 Abbey Rd, London</p>
           <p>+44 000 000 000</p>
-          <a href="mailto:">
-            <p>info@tripper.com</p>
-          </a>
+          <p>
+            <a href="mailto:">info@tripper.com</a>
+          </p>
         </div>
       </div>
-      <div className="flex space-x-20 text-center justify-center">
+      <div className="flex space-x-20 text-center justify-center md:flex-1 md:text-left md:mt-0">
         <div>
           <h4 className="text-2xl pb-4 font-semibold">Company</h4>
           <ul className="flex flex-col space-y-2 text-sm font-light ">
@@ -53,8 +53,8 @@ export default function Footer() {
           </ul>
         </div>
       </div>
-      <div className="text-center space-y-2">
-        <h4 className="text-2xl">News Letter</h4>
+      <div className="text-center space-y-2 md:flex-1 md:mt-0">
+        <h4 className="text-2xl md:text-left">News Letter</h4>
         <div className="flex w-full max-w-sm items-center space-x-2 relative">
           <Input
             className="px-2 placeholder:text-xs "
@@ -68,7 +68,7 @@ export default function Footer() {
             <RightIcon />
           </Button>
         </div>
-        <p className="text-xs text-main-yellow-color-dark pt-1 pb-2 border-b  ">
+        <p className="text-xs text-main-yellow-color-dark pt-1 pb-2 border-b md:text-left  ">
           Subscribe to get news & letter
         </p>
         <div className="flex text-sm text-left items-center ">
