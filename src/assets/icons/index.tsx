@@ -6,4 +6,6 @@ import RightIcon from "./RightIcon";
 
 import TwitterIcon from "./TwitterIcon";
 
-export { InstagramIcon, RightIcon, TwitterIcon, PinterestIcon };
+import UserIcon from "./UserIcon";
+
+export { InstagramIcon, RightIcon, TwitterIcon, PinterestIcon, UserIcon };
