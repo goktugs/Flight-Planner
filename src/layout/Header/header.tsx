@@ -1,3 +1,6 @@
+import { SearchIcon } from "@/assets/icons";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -10,10 +13,17 @@ import {
 
 export default function Header() {
   return (
-    <header className="flex items-center justify-between md:container">
+    <header className="flex items-center justify-between container mt-6 ">
       <div>Tripper</div>
 
-      <ul className="flex flex-1 items-center justify-around space-x-2 ">
+      <div className="hidden md:flex md:w-full md:max-w-xs relative">
+        <Input />
+        <Button className="absolute right-0 top-0 bg-main-yellow-color-dark p-2 text-main-black hover:bg-main-white hover:text-main-yellow-color-dark">
+          <SearchIcon />
+        </Button>
+      </div>
+
+      <ul className="flex flex-1 items-center justify-around space-x-2 md:justify-center md:space-x-40 md:flex-none ">
         <li className="underline underline-offset-8 decoration-yellow-400 decoration-4 ">
           <a href="/">Home</a>
         </li>
