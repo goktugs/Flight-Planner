@@ -6,7 +6,7 @@ import { Outlet } from "react-router-dom";
 export default function Layout() {
   return (
     <div className="bg-main-white">
-      <div className="flex flex-col h-screen w-full  font-josefin-sans ">
+      <div className="flex flex-col h-full w-full  font-josefin-sans bg-main-white ">
         <Header />
         <div className="container flex-1">
           <Outlet />
