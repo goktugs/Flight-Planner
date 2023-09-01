@@ -1,5 +1,6 @@
 // fixme: from ve tonun calısma yapısı degismeli bazı komplike durumlar fixlenmedi
 // fixme: ts hatalaruda fixlenmeli
+// form hataları handle edilmeli
 
 import { RightIcon } from "@/assets/icons";
 import ArrowRightLeftIcon from "@/assets/icons/ArrowRightLeft";
@@ -19,6 +20,7 @@ import { useQuery } from "react-query";
 import SearchTop from "./_searchTop";
 import { AutoComplete } from "@/components/autoComplete";
 import { IAirport } from "./fligthSearch";
+import { useNavigate } from "react-router-dom";
 
 export default function FlightSearch() {
   const [isTripType, setIsTripType] = useState(false);
@@ -26,6 +28,8 @@ export default function FlightSearch() {
   const [returnDate, setReturnDate] = useState<Date | undefined>();
   const [depAirport, setDepAirport] = useState<IAirport | undefined>();
   const [arrAirport, setArrAirport] = useState<IAirport | undefined>();
+
+  const navigate = useNavigate();
 
   const { data } = useQuery({
     queryKey: "flights",
@@ -42,6 +46,7 @@ export default function FlightSearch() {
   });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     fetch("http://localhost:3000/api/getFlights/", {
       method: "POST",
       headers: {
@@ -53,8 +58,13 @@ export default function FlightSearch() {
         depAirport,
         arrAirport,
       }),
-    });
-    e.preventDefault();
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        navigate("/flights");
+
+        localStorage.setItem("flights", JSON.stringify(res));
+      });
   };
 
   return (
