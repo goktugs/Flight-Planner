@@ -1,3 +1,6 @@
+// fixme: from ve tonun calısma yapısı degismeli bazı komplike durumlar fixlenmedi
+// fixme: ts hatalaruda fixlenmeli
+
 import { RightIcon } from "@/assets/icons";
 import ArrowRightLeftIcon from "@/assets/icons/ArrowRightLeft";
 import { Button } from "@/components/ui/button";
@@ -15,28 +18,14 @@ import logo from "/logo.gif";
 import { useQuery } from "react-query";
 import SearchTop from "./_searchTop";
 import { AutoComplete } from "@/components/autoComplete";
+import { IAirport } from "./fligthSearch";
 
 export default function FlightSearch() {
-  const [isChecked, setChecked] = useState(false);
-  const [value, setValue] = useState();
-  const [departureDate, setDepartureDate] = useState<Date>();
-  const [returnDate, setReturnDate] = useState<Date>();
-
-  // const { data } = useQuery(
-  //   "flights",
-  //   async () => {
-  //     const res = await fetch("http://localhost:3000/api/getAllAirports", {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     });
-  //     return res.json();
-  //   },
-  //   {
-  //     staleTime: Infinity,
-  //   }
-  // );
+  const [isTripType, setIsTripType] = useState(false);
+  const [departureDate, setDepartureDate] = useState<Date | undefined>();
+  const [returnDate, setReturnDate] = useState<Date | undefined>();
+  const [depAirport, setDepAirport] = useState<IAirport | undefined>();
+  const [arrAirport, setArrAirport] = useState<IAirport | undefined>();
 
   const { data } = useQuery({
     queryKey: "flights",
@@ -49,12 +38,32 @@ export default function FlightSearch() {
       });
       return res.json();
     },
+    staleTime: Infinity,
   });
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    fetch("http://localhost:3000/api/getFlights/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        departureDate,
+        returnDate,
+        depAirport,
+        arrAirport,
+      }),
+    });
+    e.preventDefault();
+  };
 
   return (
     <div className="border-2 border-main-black rounded-lg p-4 space-y-4 relative">
       <SearchTop />
-      <form className="space-y-4 md:flex md:space-y-0 md:space-x-4 ">
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-4 md:flex md:space-y-0 md:space-x-4 "
+      >
         <div className="flex space-x-2 w-full md:items-center">
           <div className="bg-main-black rounded-lg flex-1 pt-4 px-3 ">
             <div className="flex flex-col space-y-1">
@@ -63,8 +72,17 @@ export default function FlightSearch() {
               </div>
 
               <AutoComplete
-                options={data}
+                options={
+                  data?.filter((item: IAirport) => {
+                    if (arrAirport) {
+                      return item.id !== arrAirport.id;
+                    }
+                    return true;
+                  }) || []
+                }
                 emptyMessage={"Cannot Find an Airport"}
+                // @ts-ignore next-line
+                onValueChange={(value) => setDepAirport(value)}
               />
             </div>
           </div>
@@ -78,8 +96,17 @@ export default function FlightSearch() {
               </div>
 
               <AutoComplete
-                options={data}
+                options={
+                  data?.filter((item: IAirport) => {
+                    if (depAirport) {
+                      return item.id !== depAirport.id;
+                    }
+                    return true;
+                  }) || []
+                }
                 emptyMessage={"Cannot Find an Airport"}
+                // @ts-ignore next-line
+                onValueChange={(value) => setArrAirport(value)}
               />
             </div>
           </div>
@@ -91,11 +118,11 @@ export default function FlightSearch() {
                 Trip
               </div>
               <div className="flex text-white text-xs items-center space-x-4 py-1">
-                <span className={clsx(isChecked ? "opacity-10" : "")}>
+                <span className={clsx(isTripType ? "opacity-10" : "")}>
                   Round Trip
                 </span>
-                <Switch checked={isChecked} onCheckedChange={setChecked} />
-                <span className={clsx(isChecked ? "" : "opacity-10")}>
+                <Switch checked={isTripType} onCheckedChange={setIsTripType} />
+                <span className={clsx(isTripType ? "" : "opacity-10")}>
                   One Way
                 </span>
               </div>
@@ -130,6 +157,11 @@ export default function FlightSearch() {
                 <PopoverContent className="w-auto p-0">
                   <Calendar
                     mode="single"
+                    disabled={
+                      returnDate
+                        ? { after: returnDate }
+                        : { before: new Date() }
+                    }
                     selected={departureDate}
                     onSelect={setDepartureDate}
                     initialFocus
@@ -141,7 +173,7 @@ export default function FlightSearch() {
           <div
             className={clsx(
               "bg-main-black rounded-lg flex-1 pt-4 px-3 pb-2",
-              isChecked
+              isTripType
                 ? "opacity-25 pointer-events-none transform transition-all duration-300 ease-linear "
                 : ""
             )}
@@ -171,6 +203,11 @@ export default function FlightSearch() {
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
                   <Calendar
+                    disabled={
+                      departureDate
+                        ? { before: departureDate }
+                        : { before: new Date() }
+                    }
                     mode="single"
                     selected={returnDate}
                     onSelect={setReturnDate}
@@ -182,7 +219,10 @@ export default function FlightSearch() {
           </div>
         </div>
         <div className="w-full md:flex md:justify-center">
-          <Button className=" relative bg-main-black text-white text-lg py-2 rounded-lg md:h-full md:px-20 w-full ">
+          <Button
+            type="submit"
+            className=" relative bg-main-black text-white text-lg py-2 rounded-lg md:h-full md:px-20 w-full "
+          >
             <div className="hidden md:block">
               <img
                 src={logo}

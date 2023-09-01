@@ -7,7 +7,13 @@ import {
   CommandInput,
 } from "@/components/ui/command";
 import { Command as CommandPrimitive } from "cmdk";
-import { useState, useRef, useCallback, type KeyboardEvent } from "react";
+import {
+  useState,
+  useRef,
+  useCallback,
+  type KeyboardEvent,
+  useEffect,
+} from "react";
 
 import { Skeleton } from "./ui/skeleton";
 import { cn } from "@/lib/utils";
@@ -93,6 +99,17 @@ export const AutoComplete = ({
     },
     [onValueChange]
   );
+
+  // unselect the option when input value is empty
+
+  useEffect(() => {
+    if (inputValue === "") {
+      // @ts-ignore next-line
+      setSelected(undefined);
+      // @ts-ignore next-line
+      onValueChange?.(undefined);
+    }
+  }, [inputValue, onValueChange]);
 
   return (
     <CommandPrimitive onKeyDown={handleKeyDown}>
