@@ -10,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { NavLink } from "react-router-dom";
 
 export default function Header() {
   return (
@@ -24,11 +25,29 @@ export default function Header() {
       </div>
 
       <ul className="flex flex-1 items-center justify-around space-x-2 md:justify-center md:space-x-40 md:flex-none ">
-        <li className="underline underline-offset-8 decoration-yellow-400 decoration-4 ">
-          <a href="/">Home</a>
+        <li>
+          <NavLink
+            className={({ isActive }) =>
+              isActive
+                ? "underline underline-offset-8 decoration-yellow-400 decoration-4"
+                : ""
+            }
+            to="/"
+          >
+            Home
+          </NavLink>
         </li>
-        <li className="underline underline-offset-8 decoration-yellow-400 decoration-4 ">
-          <a href="/flights">Flights</a>
+        <li>
+          <NavLink
+            className={({ isActive }) =>
+              isActive
+                ? "underline underline-offset-8 decoration-yellow-400 decoration-4"
+                : ""
+            }
+            to="/flights"
+          >
+            Flights
+          </NavLink>
         </li>
       </ul>
 

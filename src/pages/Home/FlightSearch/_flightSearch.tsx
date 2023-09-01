@@ -1,24 +1,20 @@
-import { PlaneIcon, RightIcon } from "@/assets/icons";
+import { RightIcon } from "@/assets/icons";
 import ArrowRightLeftIcon from "@/assets/icons/ArrowRightLeft";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent } from "@/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import clsx from "clsx";
 import { format } from "date-fns";
-import React, { useState } from "react";
+import { useState } from "react";
 
 import logo from "/logo.gif";
+import { useQuery } from "react-query";
+import SearchTop from "./_searchTop";
+import { AutoComplete } from "@/components/autoComplete";
 
 export default function FlightSearch() {
   const [isChecked, setChecked] = useState(false);
@@ -26,46 +22,50 @@ export default function FlightSearch() {
   const [departureDate, setDepartureDate] = useState<Date>();
   const [returnDate, setReturnDate] = useState<Date>();
 
+  // const { data } = useQuery(
+  //   "flights",
+  //   async () => {
+  //     const res = await fetch("http://localhost:3000/api/getAllAirports", {
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+  //     return res.json();
+  //   },
+  //   {
+  //     staleTime: Infinity,
+  //   }
+  // );
+
+  const { data } = useQuery({
+    queryKey: "flights",
+    queryFn: async () => {
+      const res = await fetch("http://localhost:3000/api/getAllAirports", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      return res.json();
+    },
+  });
+
   return (
     <div className="border-2 border-main-black rounded-lg p-4 space-y-4 relative">
-      <h2 className="font-light tracking-normal text-xl md:text-5xl md:mb-12">
-        TRAVEL WITH US
-      </h2>
-      <div
-        className="h-40 w-40 mx-auto md:absolute md:right-0 
-    md:-top-4 md:h-56 md:w-56 
-  "
-      >
-        <img src="/mainGlobe.png" alt="hero" />
-      </div>
-      <h1 className="text-2xl font-light italic tracking-wide md:text-5xl">
-        <span className="font-bold ">DISCOVER</span> THE WORLD
-      </h1>
-      <div className="border border-main-black p-0.5 rounded-full inline-block ">
-        <div className="flex space-x-2 bg-black text-white items-center justify-center rounded-full px-4 py-2 text-sm">
-          <span className="w-5 h-5">
-            <PlaneIcon />
-          </span>
-          <p>Flights</p>
-        </div>
-      </div>
-      <form className="space-y-4 md:flex md:space-y-0 md:justify-between md:space-x-4 ">
+      <SearchTop />
+      <form className="space-y-4 md:flex md:space-y-0 md:space-x-4 ">
         <div className="flex space-x-2 w-full md:items-center">
           <div className="bg-main-black rounded-lg flex-1 pt-4 px-3 ">
             <div className="flex flex-col space-y-1">
               <div className="text-center bg-main-yellow-color text-xs rounded-md py-1">
                 From
               </div>
-              <Select>
-                <SelectTrigger className="w-full text-white border-none focus:border-none focus:ring-0 text-xs px-1  ">
-                  <SelectValue placeholder="Theme" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="light">Light</SelectItem>
-                  <SelectItem value="dark">Dark</SelectItem>
-                  <SelectItem value="system">System</SelectItem>
-                </SelectContent>
-              </Select>
+
+              <AutoComplete
+                options={data}
+                emptyMessage={"Cannot Find an Airport"}
+              />
             </div>
           </div>
           <div className="hidden md:block w-6 h-6">
@@ -76,16 +76,11 @@ export default function FlightSearch() {
               <div className="text-center bg-main-yellow-color text-xs rounded-md py-1">
                 To
               </div>
-              <Select>
-                <SelectTrigger className="w-full text-white border-none focus:border-none focus:ring-0 text-xs px-1  ">
-                  <SelectValue placeholder="Theme" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="light">Light</SelectItem>
-                  <SelectItem value="dark">Dark</SelectItem>
-                  <SelectItem value="system">System</SelectItem>
-                </SelectContent>
-              </Select>
+
+              <AutoComplete
+                options={data}
+                emptyMessage={"Cannot Find an Airport"}
+              />
             </div>
           </div>
         </div>
