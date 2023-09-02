@@ -1,6 +1,5 @@
 // fixme: from ve tonun calısma yapısı degismeli bazı komplike durumlar fixlenmedi
 // fixme: ts hatalaruda fixlenmeli
-// form hataları handle edilmeli
 
 import { RightIcon } from "@/assets/icons";
 import ArrowRightLeftIcon from "@/assets/icons/ArrowRightLeft";
@@ -19,19 +18,23 @@ import logo from "/logo.gif";
 import { useQuery } from "react-query";
 import SearchTop from "./_searchTop";
 import { AutoComplete } from "@/components/autoComplete";
-import { IAirport } from "./fligthSearch";
+import { IAirport } from "../../../types/fligthSearch";
 import { useNavigate } from "react-router-dom";
+import { useFlightStore } from "@/store/flightSlice";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function FlightSearch() {
-  const [isTripType, setIsTripType] = useState(false);
+  const [isTripType, setIsTripType] = useState<boolean>(false);
   const [departureDate, setDepartureDate] = useState<Date | undefined>();
   const [returnDate, setReturnDate] = useState<Date | undefined>();
   const [depAirport, setDepAirport] = useState<IAirport | undefined>();
   const [arrAirport, setArrAirport] = useState<IAirport | undefined>();
 
+  const { toast } = useToast();
+
   const navigate = useNavigate();
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: "flights",
     queryFn: async () => {
       const res = await fetch("http://localhost:3000/api/getAllAirports", {
@@ -47,23 +50,29 @@ export default function FlightSearch() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    fetch("http://localhost:3000/api/getFlights/", {
+    fetch("http://localhost:3000/api/getFlightsForOneWay/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         departureDate,
-        returnDate,
         depAirport,
         arrAirport,
       }),
     })
       .then((res) => res.json())
       .then((res) => {
-        navigate("/flights");
-
-        localStorage.setItem("flights", JSON.stringify(res));
+        if (res.error) {
+          toast({
+            title: "Blank Fields",
+            description: `${res.error}. Please fill all fields`,
+            variant: "destructive",
+          });
+        } else {
+          useFlightStore.setState({ flights: res });
+          navigate("/flights", { state: { targetId: "flightsSection" } });
+        }
       });
   };
 
@@ -127,13 +136,13 @@ export default function FlightSearch() {
               <div className="text-center bg-main-yellow-color text-xs rounded-md py-1">
                 Trip
               </div>
-              <div className="flex text-white text-xs items-center space-x-4 py-1">
+              <div className="flex text-white text-center text-xs items-center space-x-4 py-1">
                 <span className={clsx(isTripType ? "opacity-10" : "")}>
-                  Round Trip
+                  One Way
                 </span>
                 <Switch checked={isTripType} onCheckedChange={setIsTripType} />
                 <span className={clsx(isTripType ? "" : "opacity-10")}>
-                  One Way
+                  Round Trip
                 </span>
               </div>
             </div>
@@ -183,7 +192,7 @@ export default function FlightSearch() {
           <div
             className={clsx(
               "bg-main-black rounded-lg flex-1 pt-4 px-3 pb-2",
-              isTripType
+              !isTripType
                 ? "opacity-25 pointer-events-none transform transition-all duration-300 ease-linear "
                 : ""
             )}
