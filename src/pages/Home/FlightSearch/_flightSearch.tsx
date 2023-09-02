@@ -21,6 +21,7 @@ import SearchTop from "./_searchTop";
 import { AutoComplete } from "@/components/autoComplete";
 import { IAirport } from "./fligthSearch";
 import { useNavigate } from "react-router-dom";
+import { useFlightStore } from "@/store/flightSlice";
 
 export default function FlightSearch() {
   const [isTripType, setIsTripType] = useState(false);
@@ -61,9 +62,8 @@ export default function FlightSearch() {
     })
       .then((res) => res.json())
       .then((res) => {
+        useFlightStore.setState({ flights: res });
         navigate("/flights");
-
-        localStorage.setItem("flights", JSON.stringify(res));
       });
   };
 
