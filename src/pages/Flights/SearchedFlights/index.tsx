@@ -1,12 +1,73 @@
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { getAirportIATA } from "@/lib/sliceAirportIATA";
 import { getAirportCountry } from "@/lib/sliceCountries";
+import { useFilterStore } from "@/store/filterSlice";
 import { useFlightStore } from "@/store/flightSlice";
+import { IFlightsTypes } from "@/types/fligthsTypes";
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { PlaneLanding, PlaneTakeoff } from "lucide-react";
-import React from "react";
+import { useEffect, useState } from "react";
 
 export default function SearchedFlights() {
   const flights = useFlightStore((state) => state.flights);
+
+  const selectedSortBy = useFilterStore((state) => state.selectedSortBy);
+  const selectedAirlines = useFilterStore((state) => state.selectedAirlines);
+
+  const [filteredFlights, setFilteredFlights] = useState(flights);
+
+  useEffect(() => {
+    if (selectedSortBy === "Duration") {
+      setFilteredFlights(
+        flights.sort((a, b) => {
+          return a.flight_length - b.flight_length;
+        })
+      );
+    } else if (selectedSortBy === "Low Price") {
+      setFilteredFlights(
+        flights.sort((a, b) => {
+          return a.price - b.price;
+        })
+      );
+    } else if (selectedSortBy === "High Price") {
+      setFilteredFlights(
+        flights.sort((a, b) => {
+          return b.price - a.price;
+        })
+      );
+    } else if (selectedSortBy === "Departure Time") {
+      setFilteredFlights(
+        flights.sort((a, b) => {
+          return (
+            new Date(a.departure_date).getTime() -
+            new Date(b.departure_date).getTime()
+          );
+        })
+      );
+    } else if (selectedSortBy === "Arrival Time") {
+      setFilteredFlights(
+        flights.sort((a, b) => {
+          return (
+            new Date(a.arrival_date).getTime() -
+            new Date(b.arrival_date).getTime()
+          );
+        })
+      );
+    }
+  }, [flights, selectedSortBy]);
+
+  useEffect(() => {
+    if (selectedAirlines && selectedAirlines.length > 0) {
+      setFilteredFlights(
+        flights.filter((flight: IFlightsTypes) => {
+          return selectedAirlines.includes(flight.airline);
+        })
+      );
+    } else {
+      setFilteredFlights(flights);
+    }
+  }, [flights, selectedAirlines]);
 
   return (
     <div className="flex-1 flex flex-col space-y-8">
@@ -14,9 +75,20 @@ export default function SearchedFlights() {
         <div className="flex-1 flex flex-col justify-center items-center">
           <div className="text-2xl">No flights found</div>
           <div className="text-xl">Try another search</div>
+          <Alert variant="destructive" className="w-80 ">
+            <ExclamationTriangleIcon className="h-8 w-8" />
+            <AlertTitle className="text-center">(◡︵◡)</AlertTitle>
+            <AlertDescription className="text-center">
+              Due to tons of variations flights and also mock data is prepared
+              by AI, even bring 2167 flights, sometimes we can't find any
+              flights for you. Please try Atatürk Airport (IST) and Sabiha
+              Gökçen Airport (SAW) and select date range between 05-09-2023 and
+              27-09-2023.
+            </AlertDescription>
+          </Alert>
         </div>
       )}
-      {flights?.map((flight) => {
+      {filteredFlights?.map((flight: IFlightsTypes) => {
         const cities = getAirportCountry(
           flight.departure_airport,
           flight.arrival_airport
@@ -45,7 +117,7 @@ export default function SearchedFlights() {
                 <span className="text-xs">{flight.departure_airport}</span>
                 <span>
                   {format(
-                    new Date(Number(flight.departure_date)),
+                    new Date(flight.departure_date),
                     "EEE, LLL dd, hh:mm a"
                   )}
                 </span>
@@ -70,7 +142,7 @@ export default function SearchedFlights() {
                 <span className="text-xs">{flight.arrival_airport}</span>
                 <span>
                   {format(
-                    new Date(Number(flight.arrival_date)),
+                    new Date(flight.arrival_date),
                     "EEE, LLL dd, hh:mm a"
                   )}
                 </span>

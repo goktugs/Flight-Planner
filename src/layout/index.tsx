@@ -2,6 +2,7 @@ import React from "react";
 import Header from "./Header/header";
 import Footer from "./Footer/footer";
 import { Outlet } from "react-router-dom";
+import { Toaster } from "@/components/ui/toaster";
 
 export default function Layout() {
   return (
@@ -13,6 +14,7 @@ export default function Layout() {
         </div>
         <Footer />
       </div>
+      <Toaster />
     </div>
   );
 }
