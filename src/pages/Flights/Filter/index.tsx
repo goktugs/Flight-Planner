@@ -6,10 +6,10 @@ import {
 } from "@/components/ui/accordion2";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
+import { useFilterStore } from "@/store/filterSlice";
 import clsx from "clsx";
-import React, { useState } from "react";
+import { useState } from "react";
 
 const SORTBY_OPTIONS = [
   {
@@ -26,24 +26,14 @@ const SORTBY_OPTIONS = [
   },
   {
     id: 4,
-    label: "Hour",
+    label: "Departure Time",
+  },
+  {
+    id: 5,
+    label: "Arrival Time",
   },
 ];
 
-const CURRENCY_OPTIONS = [
-  {
-    id: 1,
-    label: "USD",
-  },
-  {
-    id: 2,
-    label: "EUR",
-  },
-  {
-    id: 3,
-    label: "TRY",
-  },
-];
 const AIRLINES_OPTIONS = [
   {
     id: 1,
@@ -112,6 +102,13 @@ const AIRLINES_OPTIONS = [
 export default function Filter() {
   const [isOpen, setIsOpen] = useState(false);
 
+  const {
+    selectedSortBy,
+    selectedAirlines,
+    setSelectedSortBy,
+    setSelectedAirlines,
+  } = useFilterStore();
+
   return (
     <div className="flex flex-col space-y-4 md:w-1/8">
       <div className="flex items-center space-x-4">
@@ -124,13 +121,16 @@ export default function Filter() {
           isOpen ? "" : "opacity-25 pointer-events-none "
         )}
       >
-        <Accordion defaultValue={["item-1", "item-4"]} type="multiple">
+        <Accordion defaultValue={["item-1", "item-2"]} type="multiple">
           <AccordionItem value="item-1">
             <AccordionTrigger className="text-xl font-normal">
               Sort by
             </AccordionTrigger>
             <AccordionContent>
-              <RadioGroup>
+              <RadioGroup
+                value={selectedSortBy}
+                onValueChange={(value) => setSelectedSortBy(value)}
+              >
                 {SORTBY_OPTIONS.map((option) => (
                   <div key={option.id} className="flex items-center space-x-4">
                     <RadioGroupItem
@@ -145,40 +145,16 @@ export default function Filter() {
               </RadioGroup>
             </AccordionContent>
           </AccordionItem>
+
           <AccordionItem value="item-2">
-            <AccordionTrigger className="text-xl font-normal">
-              Currency
-            </AccordionTrigger>
-            <AccordionContent>
-              <RadioGroup>
-                {CURRENCY_OPTIONS.map((option) => (
-                  <div key={option.id} className="flex items-center space-x-4">
-                    <RadioGroupItem
-                      value={option.label}
-                      id={option.id.toString()}
-                    />
-                    <Label className="text-base" htmlFor={option.label}>
-                      {option.label}
-                    </Label>
-                  </div>
-                ))}
-              </RadioGroup>
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="item-3">
-            <AccordionTrigger className="text-xl font-normal">
-              Price
-            </AccordionTrigger>
-            <AccordionContent className="pt-2">
-              <Slider defaultValue={[33]} max={100} step={1} />
-            </AccordionContent>
-          </AccordionItem>
-          <AccordionItem value="item-4">
             <AccordionTrigger className="text-xl font-normal">
               Airlines
             </AccordionTrigger>
             <AccordionContent>
-              <RadioGroup>
+              <RadioGroup
+                value={selectedAirlines}
+                onValueChange={(value) => setSelectedAirlines(value)}
+              >
                 {AIRLINES_OPTIONS.map((option) => (
                   <div key={option.id} className="flex items-center space-x-4">
                     <RadioGroupItem
