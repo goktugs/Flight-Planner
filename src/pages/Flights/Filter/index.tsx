@@ -4,6 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion2";
+import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
@@ -115,6 +116,14 @@ export default function Filter() {
         <Switch checked={isOpen} onCheckedChange={setIsOpen} />
         <h3 className="text-2xl tracking-wide">Filters</h3>
       </div>
+      <Button
+        onClick={() => {
+          setSelectedSortBy("");
+          setSelectedAirlines("");
+        }}
+      >
+        <span className="text-base">Reset</span>
+      </Button>
       <div
         className={clsx(
           "border-2 border-main-black rounded-md py-2 px-4",
