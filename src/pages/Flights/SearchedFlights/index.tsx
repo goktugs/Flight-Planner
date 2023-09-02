@@ -2,15 +2,20 @@ import { getAirportIATA } from "@/lib/sliceAirportIATA";
 import { getAirportCountry } from "@/lib/sliceCountries";
 import { useFlightStore } from "@/store/flightSlice";
 import { format } from "date-fns";
-import { PlaneIcon, PlaneLanding, PlaneTakeoff } from "lucide-react";
+import { PlaneLanding, PlaneTakeoff } from "lucide-react";
 import React from "react";
 
 export default function SearchedFlights() {
   const flights = useFlightStore((state) => state.flights);
-  console.log(flights);
 
   return (
     <div className="flex-1 flex flex-col space-y-8">
+      {flights?.length === 0 && (
+        <div className="flex-1 flex flex-col justify-center items-center">
+          <div className="text-2xl">No flights found</div>
+          <div className="text-xl">Try another search</div>
+        </div>
+      )}
       {flights?.map((flight) => {
         const cities = getAirportCountry(
           flight.departure_airport,
@@ -23,7 +28,10 @@ export default function SearchedFlights() {
         );
 
         return (
-          <div className="flex flex-col border-2 border-main-black rounded-lg shadow-lg">
+          <div
+            key={flight.id}
+            className="flex flex-col border-2 border-main-black rounded-lg shadow-lg"
+          >
             <div className="bg-main-yellow-color flex justify-between px-8 pt-4 rounded-t-lg border-b border-black pb-4">
               <div className="flex text-lg space-x-1">
                 <div>{cities.depCountry}</div>
