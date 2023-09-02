@@ -24,7 +24,7 @@ import { useNavigate } from "react-router-dom";
 import { useFlightStore } from "@/store/flightSlice";
 
 export default function FlightSearch() {
-  const [isTripType, setIsTripType] = useState(false);
+  const [isTripType, setIsTripType] = useState<boolean>(false);
   const [departureDate, setDepartureDate] = useState<Date | undefined>();
   const [returnDate, setReturnDate] = useState<Date | undefined>();
   const [depAirport, setDepAirport] = useState<IAirport | undefined>();
@@ -32,7 +32,7 @@ export default function FlightSearch() {
 
   const navigate = useNavigate();
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: "flights",
     queryFn: async () => {
       const res = await fetch("http://localhost:3000/api/getAllAirports", {
@@ -63,7 +63,7 @@ export default function FlightSearch() {
       .then((res) => res.json())
       .then((res) => {
         useFlightStore.setState({ flights: res });
-        navigate("/flights");
+        navigate("/flights", { state: { targetId: "flightsSection" } });
       });
   };
 
@@ -129,11 +129,11 @@ export default function FlightSearch() {
               </div>
               <div className="flex text-white text-xs items-center space-x-4 py-1">
                 <span className={clsx(isTripType ? "opacity-10" : "")}>
-                  Round Trip
+                  One Way
                 </span>
                 <Switch checked={isTripType} onCheckedChange={setIsTripType} />
                 <span className={clsx(isTripType ? "" : "opacity-10")}>
-                  One Way
+                  Round Trip
                 </span>
               </div>
             </div>
@@ -183,7 +183,7 @@ export default function FlightSearch() {
           <div
             className={clsx(
               "bg-main-black rounded-lg flex-1 pt-4 px-3 pb-2",
-              isTripType
+              !isTripType
                 ? "opacity-25 pointer-events-none transform transition-all duration-300 ease-linear "
                 : ""
             )}
