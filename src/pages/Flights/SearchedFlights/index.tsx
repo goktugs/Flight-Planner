@@ -18,63 +18,56 @@ export default function SearchedFlights() {
   const [filteredFlights, setFilteredFlights] = useState(flights);
 
   useEffect(() => {
-    if (selectedSortBy === "Duration") {
-      setFilteredFlights(
-        flights.sort((a, b) => {
-          return a.flight_length - b.flight_length;
-        })
-      );
-    } else if (selectedSortBy === "Low Price") {
-      setFilteredFlights(
-        flights.sort((a, b) => {
-          return a.price - b.price;
-        })
-      );
-    } else if (selectedSortBy === "High Price") {
-      setFilteredFlights(
-        flights.sort((a, b) => {
-          return b.price - a.price;
-        })
-      );
-    } else if (selectedSortBy === "Departure Time") {
-      setFilteredFlights(
-        flights.sort((a, b) => {
-          return (
-            new Date(a.departure_date).getTime() -
-            new Date(b.departure_date).getTime()
-          );
-        })
-      );
-    } else if (selectedSortBy === "Arrival Time") {
-      setFilteredFlights(
-        flights.sort((a, b) => {
-          return (
-            new Date(a.arrival_date).getTime() -
-            new Date(b.arrival_date).getTime()
-          );
-        })
-      );
-    }
-  }, [flights, selectedSortBy]);
+    let filteredFlightsCopy = [...flights];
 
-  useEffect(() => {
     if (selectedAirlines && selectedAirlines.length > 0) {
-      setFilteredFlights(
-        flights.filter((flight: IFlightsTypes) => {
+      filteredFlightsCopy = filteredFlightsCopy.filter(
+        (flight: IFlightsTypes) => {
           return selectedAirlines.includes(flight.airline);
-        })
+        }
       );
-    } else {
-      setFilteredFlights(flights);
     }
-  }, [flights, selectedAirlines]);
+
+    if (selectedSortBy === "Duration") {
+      filteredFlightsCopy.sort((a, b) => {
+        return a.flight_length - b.flight_length;
+      });
+    } else if (selectedSortBy === "Low Price") {
+      filteredFlightsCopy.sort((a, b) => {
+        return a.price - b.price;
+      });
+    } else if (selectedSortBy === "High Price") {
+      filteredFlightsCopy.sort((a, b) => {
+        return b.price - a.price;
+      });
+    } else if (selectedSortBy === "Departure Time") {
+      filteredFlightsCopy.sort((a, b) => {
+        return (
+          new Date(a.departure_date).getTime() -
+          new Date(b.departure_date).getTime()
+        );
+      });
+    } else if (selectedSortBy === "Arrival Time") {
+      filteredFlightsCopy.sort((a, b) => {
+        return (
+          new Date(a.arrival_date).getTime() -
+          new Date(b.arrival_date).getTime()
+        );
+      });
+    }
+
+    setFilteredFlights(filteredFlightsCopy);
+  }, [flights, selectedSortBy, selectedAirlines]);
 
   return (
     <div className="flex-1 flex flex-col space-y-8">
-      {flights?.length === 0 && (
+      {filteredFlights?.length === 0 && (
         <div className="flex-1 flex flex-col justify-center items-center">
-          <div className="text-2xl">No flights found</div>
+          <div className="text-3xl">No flights found</div>
           <div className="text-xl">Try another search</div>
+          <div className="text-sm">or</div>
+
+          <div className="text-xl">Change filter queries</div>
           <Alert variant="destructive" className="w-80 ">
             <ExclamationTriangleIcon className="h-8 w-8" />
             <AlertTitle className="text-center">(◡︵◡)</AlertTitle>
