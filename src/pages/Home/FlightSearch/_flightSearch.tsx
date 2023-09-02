@@ -1,6 +1,5 @@
 // fixme: from ve tonun calısma yapısı degismeli bazı komplike durumlar fixlenmedi
 // fixme: ts hatalaruda fixlenmeli
-// form hataları handle edilmeli
 
 import { RightIcon } from "@/assets/icons";
 import ArrowRightLeftIcon from "@/assets/icons/ArrowRightLeft";
@@ -22,6 +21,7 @@ import { AutoComplete } from "@/components/autoComplete";
 import { IAirport } from "../../../types/fligthSearch";
 import { useNavigate } from "react-router-dom";
 import { useFlightStore } from "@/store/flightSlice";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function FlightSearch() {
   const [isTripType, setIsTripType] = useState<boolean>(false);
@@ -29,6 +29,8 @@ export default function FlightSearch() {
   const [returnDate, setReturnDate] = useState<Date | undefined>();
   const [depAirport, setDepAirport] = useState<IAirport | undefined>();
   const [arrAirport, setArrAirport] = useState<IAirport | undefined>();
+
+  const { toast } = useToast();
 
   const navigate = useNavigate();
 
@@ -61,8 +63,16 @@ export default function FlightSearch() {
     })
       .then((res) => res.json())
       .then((res) => {
-        useFlightStore.setState({ flights: res });
-        navigate("/flights", { state: { targetId: "flightsSection" } });
+        if (res.error) {
+          toast({
+            title: "Blank Fields",
+            description: `${res.error}. Please fill all fields`,
+            variant: "destructive",
+          });
+        } else {
+          useFlightStore.setState({ flights: res });
+          navigate("/flights", { state: { targetId: "flightsSection" } });
+        }
       });
   };
 
