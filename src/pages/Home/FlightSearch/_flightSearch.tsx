@@ -37,12 +37,15 @@ export default function FlightSearch() {
   const { data } = useQuery({
     queryKey: "flights",
     queryFn: async () => {
-      const res = await fetch("http://localhost:3000/api/getAllAirports", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_PROD_URL}/api/getAllAirports`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       return res.json();
     },
     staleTime: Infinity,
@@ -50,7 +53,7 @@ export default function FlightSearch() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    fetch("http://localhost:3000/api/getFlightsForOneWay/", {
+    fetch(`${import.meta.env.VITE_PROD_URL}/api/getFlightsForOneWay/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
