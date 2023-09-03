@@ -10,6 +10,7 @@ import { PlaneLanding, PlaneTakeoff } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function SearchedFlights() {
+  // @ts-ignore next-line
   const flights = useFlightStore((state) => state.flights);
 
   const selectedSortBy = useFilterStore((state) => state.selectedSortBy);

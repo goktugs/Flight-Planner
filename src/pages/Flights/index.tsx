@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Filter from "./Filter";
 import SearchedFlights from "./SearchedFlights";
 import { useLocation } from "react-router-dom";
