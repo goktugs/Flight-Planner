@@ -34,7 +34,7 @@ export default function FlightSearch() {
 
   const navigate = useNavigate();
 
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: "flights",
     queryFn: async () => {
       const res = await fetch("http://localhost:3000/api/getAllAirports", {
