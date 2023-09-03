@@ -79,6 +79,8 @@ export default function FlightSearch() {
       });
   };
 
+  console.log(departureDate);
+
   return (
     <div className="border-2 border-main-black rounded-lg p-4 space-y-4 relative">
       <SearchTop />

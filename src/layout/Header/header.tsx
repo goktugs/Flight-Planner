@@ -10,12 +10,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 export default function Header() {
+  const navigate = useNavigate();
+
+  function handleClick() {
+    navigate("/");
+  }
+
   return (
     <header className="flex items-center justify-between container mt-6 ">
-      <div>Tripper</div>
+      <button type="button" className="text-2xl" onClick={handleClick}>
+        Tripper
+      </button>
 
       <div className="hidden md:flex md:w-full md:max-w-xs relative">
         <Input />
