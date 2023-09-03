@@ -5,9 +5,10 @@ import { useFilterStore } from "@/store/filterSlice";
 import { useFlightStore } from "@/store/flightSlice";
 import { IFlightsTypes } from "@/types/fligthsTypes";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-import { format } from "date-fns";
+import { addDays, format } from "date-fns";
 import { PlaneLanding, PlaneTakeoff } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function SearchedFlights() {
   // @ts-ignore next-line
@@ -17,6 +18,8 @@ export default function SearchedFlights() {
   const selectedAirlines = useFilterStore((state) => state.selectedAirlines);
 
   const [filteredFlights, setFilteredFlights] = useState(flights);
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     let filteredFlightsCopy = [];
@@ -69,20 +72,15 @@ export default function SearchedFlights() {
     <div className="flex-1 flex flex-col space-y-8">
       {filteredFlights?.length === 0 ? (
         <div className="flex-1 flex flex-col justify-center items-center">
-          <div className="text-3xl">No flights found</div>
-          <div className="text-xl">Try another search</div>
-          <div className="text-sm">or</div>
-
-          <div className="text-xl">Change filter queries</div>
+          <div className="text-3xl">{t("noFlights")}</div>
+          <div className="text-xl">{t("tryAnother")}</div>
+          <div className="text-sm">{t("or")}</div>
+          <div className="text-xl">{t("changeFilter")}</div>
           <Alert variant="destructive" className="w-80 ">
             <ExclamationTriangleIcon className="h-8 w-8" />
             <AlertTitle className="text-center">(◡︵◡)</AlertTitle>
             <AlertDescription className="text-center">
-              Due to tons of variations flights and also mock data is prepared
-              by AI, even bring 2167 flights, sometimes we can't find any
-              flights for you. Please try Atatürk Airport (ISL) and Sabiha
-              Gökçen Airport (SAW) and select date range between 05-09-2023 and
-              27-09-2023.
+              {t("noFlightsText")}
             </AlertDescription>
           </Alert>
         </div>
@@ -116,7 +114,7 @@ export default function SearchedFlights() {
                   <span className="text-xs">{flight.departure_airport}</span>
                   <span>
                     {format(
-                      new Date(flight.departure_date),
+                      addDays(new Date(flight.departure_date), 1),
                       "EEE, LLL dd, hh:mm a"
                     )}
                   </span>
@@ -124,7 +122,9 @@ export default function SearchedFlights() {
                 <div className="flex-1 flex flex-col">
                   <div className="flex justify-between">
                     <span>Departure</span>
-                    <span>{flight.flight_length}</span>
+                    <span>
+                      {t("flightLen")}: {flight.flight_length} hour
+                    </span>
                     <span>Arrival</span>
                   </div>
                   <div className="flex justify-between">
@@ -141,7 +141,7 @@ export default function SearchedFlights() {
                   <span className="text-xs">{flight.arrival_airport}</span>
                   <span>
                     {format(
-                      new Date(flight.arrival_date),
+                      addDays(new Date(flight.updated_departure_date), 1),
                       "EEE, LLL dd, hh:mm a"
                     )}
                   </span>

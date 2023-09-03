@@ -11,6 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { useFilterStore } from "@/store/filterSlice";
 import clsx from "clsx";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const SORTBY_OPTIONS = [
   {
@@ -102,6 +103,7 @@ const AIRLINES_OPTIONS = [
 ];
 export default function Filter() {
   const [isOpen, setIsOpen] = useState(false);
+  const { t } = useTranslation();
 
   const {
     selectedSortBy,
@@ -114,7 +116,7 @@ export default function Filter() {
     <div className="flex flex-col space-y-4 md:w-1/8">
       <div className="flex items-center space-x-4">
         <Switch checked={isOpen} onCheckedChange={setIsOpen} />
-        <h3 className="text-2xl tracking-wide">Filters</h3>
+        <h3 className="text-2xl tracking-wide">{t("filters")}</h3>
       </div>
       <Button
         onClick={() => {
@@ -147,7 +149,7 @@ export default function Filter() {
                       id={option.id.toString()}
                     />
                     <Label className="text-base" htmlFor={option.label}>
-                      {option.label}
+                      {t(`${option.label}`)}
                     </Label>
                   </div>
                 ))}
@@ -157,7 +159,7 @@ export default function Filter() {
 
           <AccordionItem value="item-2">
             <AccordionTrigger className="text-xl font-normal">
-              Airlines
+              {t("Airlines")}
             </AccordionTrigger>
             <AccordionContent>
               <RadioGroup

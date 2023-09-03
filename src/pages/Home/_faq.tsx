@@ -4,11 +4,14 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { AccordionItem } from "@radix-ui/react-accordion";
+import { t } from "i18next";
 
 export default function Faq() {
   return (
     <div className="flex flex-col space-y-4">
-      <h3 className="text-2xl tracking-wide">Popular Questions</h3>
+      <h3 className="text-2xl tracking-wide">
+        {t("frequentlyAskedQuestions")}
+      </h3>
       <Accordion className="space-y-4" type="single" collapsible>
         <AccordionItem value="item-1">
           <AccordionTrigger>How to book a flight?</AccordionTrigger>
