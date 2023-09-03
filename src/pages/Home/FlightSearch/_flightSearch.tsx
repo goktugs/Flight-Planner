@@ -22,6 +22,7 @@ import { IAirport } from "../../../types/fligthSearch";
 import { useNavigate } from "react-router-dom";
 import { useFlightStore } from "@/store/flightSlice";
 import { useToast } from "@/components/ui/use-toast";
+import { useTranslation } from "react-i18next";
 
 export default function FlightSearch() {
   const [isTripType, setIsTripType] = useState<boolean>(false);
@@ -29,6 +30,7 @@ export default function FlightSearch() {
   const [returnDate, setReturnDate] = useState<Date | undefined>();
   const [depAirport, setDepAirport] = useState<IAirport | undefined>();
   const [arrAirport, setArrAirport] = useState<IAirport | undefined>();
+  const { t } = useTranslation();
 
   const { toast } = useToast();
 
@@ -53,33 +55,64 @@ export default function FlightSearch() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    fetch(`${import.meta.env.VITE_PROD_URL}/api/getFlightsForOneWay/`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        departureDate,
-        depAirport,
-        arrAirport,
-      }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.error) {
-          toast({
-            title: "Blank Fields",
-            description: `${res.error}. Please fill all fields`,
-            variant: "destructive",
-          });
-        } else {
-          useFlightStore.setState({ flights: res });
-          navigate("/flights", { state: { targetId: "flightsSection" } });
-        }
-      });
-  };
 
-  console.log(departureDate);
+    if (isTripType) {
+      // Round trip seçili ise
+      fetch(
+        `${import.meta.env.VITE_PROD_URL}/api/postGetFlightsForRoundTrip/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            departureDate,
+            returnDate,
+            depAirport,
+            arrAirport,
+          }),
+        }
+      )
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.error) {
+            toast({
+              title: "Blank Fields",
+              description: `${res.error}. Please fill all fields`,
+              variant: "destructive",
+            });
+          } else {
+            useFlightStore.setState({ flights: res });
+            navigate("/flights", { state: { targetId: "flightsSection" } });
+          }
+        });
+    } else {
+      fetch(`${import.meta.env.VITE_PROD_URL}/api/getFlightsForOneWay/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          departureDate,
+          depAirport,
+          arrAirport,
+        }),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          if (res.error) {
+            toast({
+              title: "Blank Fields",
+              description: `${res.error}. Please fill all fields`,
+              variant: "destructive",
+            });
+          } else {
+            useFlightStore.setState({ flights: res });
+            navigate("/flights", { state: { targetId: "flightsSection" } });
+          }
+        });
+    }
+  };
 
   return (
     <div className="border-2 border-main-black rounded-lg p-4 space-y-4 relative">
@@ -92,7 +125,7 @@ export default function FlightSearch() {
           <div className="bg-main-black rounded-lg flex-1 pt-4 px-3 ">
             <div className="flex flex-col space-y-1">
               <div className="text-center bg-main-yellow-color text-xs rounded-md py-1">
-                From
+                {t("from")}
               </div>
 
               <AutoComplete
@@ -116,7 +149,7 @@ export default function FlightSearch() {
           <div className="bg-main-black rounded-lg flex-1 pt-4 px-3 ">
             <div className="flex flex-col space-y-1">
               <div className="text-center bg-main-yellow-color text-xs rounded-md py-1">
-                To
+                {t("to")}
               </div>
 
               <AutoComplete
@@ -139,15 +172,15 @@ export default function FlightSearch() {
           <div className="bg-main-black rounded-lg pt-4 px-3 md:pb-2 ">
             <div className="flex flex-col space-y-1">
               <div className="text-center bg-main-yellow-color text-xs rounded-md py-1">
-                Trip
+                {t("trip")}
               </div>
               <div className="flex text-white text-center text-xs items-center space-x-4 py-1">
                 <span className={clsx(isTripType ? "opacity-10" : "")}>
-                  One Way
+                  {t("oneWay")}
                 </span>
                 <Switch checked={isTripType} onCheckedChange={setIsTripType} />
                 <span className={clsx(isTripType ? "" : "opacity-10")}>
-                  Round Trip
+                  {t("roundTrip")}
                 </span>
               </div>
             </div>
@@ -157,7 +190,7 @@ export default function FlightSearch() {
           <div className="bg-main-black rounded-lg flex-1 pt-4 px-3 pb-2 ">
             <div className="flex flex-col space-y-1">
               <div className="text-center bg-main-yellow-color text-xs rounded-md py-1">
-                Departure
+                {t("departure")}
               </div>
               <Popover>
                 <PopoverTrigger asChild>
@@ -204,7 +237,7 @@ export default function FlightSearch() {
           >
             <div className="flex flex-col space-y-1">
               <div className="text-center bg-main-yellow-color text-xs rounded-md py-1">
-                Return
+                {t("return")}
               </div>
               <Popover>
                 <PopoverTrigger asChild>
@@ -254,7 +287,7 @@ export default function FlightSearch() {
                 className="absolute left-4 w-14 h-14 top-1/2 transform -translate-y-1/2"
               />
             </div>
-            Discover
+            {t("discover")}
             <div className="absolute right-4 w-6 h-6 ">
               <RightIcon />
             </div>

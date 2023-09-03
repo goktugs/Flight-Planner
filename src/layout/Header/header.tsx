@@ -11,13 +11,18 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { NavLink, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function Header() {
   const navigate = useNavigate();
-
+  const { t, i18n } = useTranslation();
   function handleClick() {
     navigate("/");
   }
+
+  const changeLanguage = async (lng: string) => {
+    await i18n.changeLanguage(lng);
+  };
 
   return (
     <header className="flex items-center justify-between container mt-6 ">
@@ -42,7 +47,7 @@ export default function Header() {
             }
             to="/"
           >
-            Home
+            {t("home")}
           </NavLink>
         </li>
         <li>
@@ -54,35 +59,25 @@ export default function Header() {
             }
             to="/flights"
           >
-            Flights
+            {t("flights")}
           </NavLink>
         </li>
       </ul>
 
       <div className="flex space-x-1 text-xs">
-        <Select>
+        <Select
+          onValueChange={(value) => {
+            changeLanguage(value);
+          }}
+        >
           <SelectTrigger className="w-full border-none bg-transparent shadow-none active:border-none focus:border-none focus-visible:border-none">
-            <SelectValue placeholder="EN" />
+            <SelectValue placeholder="En" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
               <SelectLabel>Language</SelectLabel>
               <SelectItem value="en">En</SelectItem>
               <SelectItem value="tr">Tr</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-
-        <Select>
-          <SelectTrigger className="w-full border-none bg-transparent shadow-none active:border-none focus:border-none focus-visible:border-none">
-            <SelectValue placeholder="USD" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Currency</SelectLabel>
-              <SelectItem value="usd">Usd</SelectItem>
-              <SelectItem value="euro">Euro</SelectItem>
-              <SelectItem value="tl">Tl</SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>

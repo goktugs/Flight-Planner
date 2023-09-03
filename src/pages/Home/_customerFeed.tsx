@@ -1,9 +1,12 @@
 import { format } from "date-fns";
+import { useTranslation } from "react-i18next";
 
 export default function CustomerFeedback() {
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-col space-y-4">
-      <h3 className="text-2xl tracking-wide">Popular Questions</h3>
+      <h3 className="text-2xl tracking-wide">{t("popularQ")}</h3>
       <div className="flex-col flex md:flex-row space-y-4 md:space-x-2 md:space-y-0">
         <div className="rounded-xl bg-main-black text-white flex flex-col py-2 px-4 flex-1 space-y-8">
           <div className="flex justify-between items-center pt-4">
