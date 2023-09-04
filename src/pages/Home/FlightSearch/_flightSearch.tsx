@@ -18,11 +18,12 @@ import logo from "/logo.gif";
 import { useQuery } from "react-query";
 import SearchTop from "./_searchTop";
 import { AutoComplete } from "@/components/autoComplete";
-import { IAirport } from "../../../types/fligthSearch";
+import { IAirport } from "../../../types/airportTypes";
 import { useNavigate } from "react-router-dom";
 import { useFlightStore } from "@/store/flightSlice";
 import { useToast } from "@/components/ui/use-toast";
 import { useTranslation } from "react-i18next";
+import { useRoundTripStore } from "@/store/roundTripSlice";
 
 export default function FlightSearch() {
   const [departureDate, setDepartureDate] = useState<Date | undefined>();
@@ -78,8 +79,11 @@ export default function FlightSearch() {
               variant: "destructive",
             });
           } else {
-            useFlightStore.setState({ flights: res });
-            navigate("/flights", { state: { targetId: "flightsSection" } });
+            useFlightStore.setState({ flights: [] });
+            useRoundTripStore.setState({ roundTripFlights: res });
+            navigate("/tripflights", {
+              state: { targetId: "flightsSection" },
+            });
           }
         });
     } else {
@@ -103,6 +107,7 @@ export default function FlightSearch() {
               variant: "destructive",
             });
           } else {
+            useRoundTripStore.setState({ roundTripFlights: [] });
             useFlightStore.setState({ flights: res });
             navigate("/flights", { state: { targetId: "flightsSection" } });
           }

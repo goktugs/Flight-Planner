@@ -1,27 +1,67 @@
-# React + TypeScript + Vite
+# Flight Plannner
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The project displays the flights it receives from the backend on the frontend. Flights can be selected and sorted. Also site have few languages like English and Turkish
 
-Currently, two official plugins are available:
+Beside site have responsiveness
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Few Photo
 
-## Expanding the ESLint configuration
+[![Photos](https://prnt.sc/0PlJ6dCa3IKN)](Photos)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+[![Mobile](https://prnt.sc/4UcS0n1--EBk)](Mobile)
 
-- Configure the top-level `parserOptions` property like this:
+## To Run
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
+To Run Project Correctly You Need To Run Backend Too
+
+[Please Visit] (https://github.com/goktugs/FlightPlanner-Be)
+
+To Run Project
+
+Firstly
+
+```bash
+  Copy .env.example to .env
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Then
+
+```bash
+  yarn
+```
+
+Finally
+
+```bash
+  yarn dev
+```
+
+## API Usage
+
+#### Get All Flights
+
+```http
+  GET /api/getAllFlights
+```
+
+#### Get All Airports
+
+```http
+  GET /api/getAllAirports
+```
+
+#### Get Flights for One Way for Selected Queries
+
+```http
+  POST /api/getFlightsForOneWay
+```
+
+#### Get Flights for Round Trip Selected Queries
+
+```http
+  POST /api/getFlightsForRoundTrip
+```
+
+## Thanks Sections
+
+- [@octokatherine](https://www.behance.net/gallery/169344001/Flight-Ticket-Booking-Website) for design.

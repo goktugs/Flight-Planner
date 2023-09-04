@@ -62,6 +62,18 @@ export default function Header() {
             {t("flights")}
           </NavLink>
         </li>
+        <li>
+          <NavLink
+            className={({ isActive }) =>
+              isActive
+                ? "underline underline-offset-8 decoration-yellow-400 decoration-4"
+                : ""
+            }
+            to="/tripflights"
+          >
+            {t("tripFlight")}
+          </NavLink>
+        </li>
       </ul>
 
       <div className="flex space-x-1 text-xs">

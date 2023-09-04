@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import Flights from "./Flights";
 import Home from "./Home";
 import FlightSearch from "./Home/FlightSearch/_flightSearch";
+import TripFlights from "./TripFlights";
 
 export default function Main() {
   return (
@@ -10,6 +11,7 @@ export default function Main() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/flights" element={<Flights />} />
+        <Route path="/tripflights" element={<TripFlights />} />
       </Routes>
     </main>
   );

@@ -11,11 +11,10 @@
   "trip": "Yolculuk",
   "discover": "Keşfet",
   "oneWay": "Tek Yön",
-  "roundTrip": "Gidiş Dönüş",
   "whyus": "Neden Biz?",
   "tripPlanning": "Yolculuk Planlama",
   "honestPrices": "Dürüst Fiyatlar",
-
+  "tripFlight": "Gidiş Dönüş",
   "support": "Destek",
   "popularQ": "Popüler Sorular",
   "frequentlyAskedQuestions": "Sıkça Sorulan Sorular",
@@ -31,5 +30,6 @@
   "or": "veya",
   "changeFilter": "Filtreleri değiştirin",
   "noFlightsText": "Uçuşların tonlarca varyasyonu olmasından dolayı ve yapay zeka tarafından hazırlanmış sahte veriler olduğu için, 2167 adet uçuş olsa bile, bazen sizin için uçuş bulamıyoruz. Lütfen Atatürk Havalimanı (ISL) ve Sabiha Gökçen Havalimanı'nı (SAW) ve 05-09-2023 ile 27-09-2023 arasındaki tarih aralığını seçin.",
-  "flightLen": "Uçuş Süresi"
+  "flightLen": "Uçuş Süresi",
+  "roundTrip": "Gidiş Dönüş"
 }

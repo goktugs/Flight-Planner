@@ -17,14 +17,12 @@ export default function SearchedFlights() {
   const selectedSortBy = useFilterStore((state) => state.selectedSortBy);
   const selectedAirlines = useFilterStore((state) => state.selectedAirlines);
 
-  const [filteredFlights, setFilteredFlights] = useState(flights);
-
-  console.log("f", filteredFlights);
+  const [filteredFlights, setFilteredFlights] = useState<IFlightsTypes[]>([]);
 
   const { t } = useTranslation();
 
   useEffect(() => {
-    let filteredFlightsCopy = [];
+    let filteredFlightsCopy: IFlightsTypes[] = [];
 
     if (flights && flights.length > 0) {
       filteredFlightsCopy = [...flights];
@@ -38,29 +36,29 @@ export default function SearchedFlights() {
       }
 
       if (selectedSortBy === "Duration") {
-        filteredFlightsCopy.sort((a, b) => {
+        filteredFlightsCopy.sort((a: IFlightsTypes, b: IFlightsTypes) => {
           return a.flight_length - b.flight_length;
         });
       } else if (selectedSortBy === "Low Price") {
-        filteredFlightsCopy.sort((a, b) => {
+        filteredFlightsCopy.sort((a: IFlightsTypes, b: IFlightsTypes) => {
           return a.price - b.price;
         });
       } else if (selectedSortBy === "High Price") {
-        filteredFlightsCopy.sort((a, b) => {
+        filteredFlightsCopy.sort((a: IFlightsTypes, b: IFlightsTypes) => {
           return b.price - a.price;
         });
       } else if (selectedSortBy === "Departure Time") {
-        filteredFlightsCopy.sort((a, b) => {
+        filteredFlightsCopy.sort((a: IFlightsTypes, b: IFlightsTypes) => {
           return (
             new Date(a.departure_date).getTime() -
             new Date(b.departure_date).getTime()
           );
         });
       } else if (selectedSortBy === "Arrival Time") {
-        filteredFlightsCopy.sort((a, b) => {
+        filteredFlightsCopy.sort((a: IFlightsTypes, b: IFlightsTypes) => {
           return (
-            new Date(a.arrival_date).getTime() -
-            new Date(b.arrival_date).getTime()
+            new Date(a.updated_departure_date).getTime() -
+            new Date(b.updated_departure_date).getTime()
           );
         });
       }
@@ -68,6 +66,8 @@ export default function SearchedFlights() {
 
     setFilteredFlights(filteredFlightsCopy);
   }, [flights, selectedSortBy, selectedAirlines]);
+
+  console.log("flights", flights);
 
   return (
     <div className="flex-1 flex flex-col space-y-8">
