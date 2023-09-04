@@ -67,8 +67,6 @@ export default function SearchedFlights() {
     setFilteredFlights(filteredFlightsCopy);
   }, [flights, selectedSortBy, selectedAirlines]);
 
-  console.log("flights", flights);
-
   return (
     <div className="flex-1 flex flex-col space-y-8">
       {filteredFlights?.length === 0 ? (

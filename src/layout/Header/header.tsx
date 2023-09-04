@@ -12,6 +12,9 @@ import {
 } from "@/components/ui/select";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useLoadingStore } from "@/store/loadingSlice";
+import LoadingBar from "react-top-loading-bar";
+import { useEffect, useState } from "react";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -24,8 +27,26 @@ export default function Header() {
     await i18n.changeLanguage(lng);
   };
 
+  const { loading } = useLoadingStore();
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    if (loading) {
+      setProgress(100);
+    } else {
+      setProgress(0);
+    }
+  }, [loading]);
+
   return (
     <header className="flex items-center justify-between container mt-6 ">
+      <LoadingBar
+        color="#f59e0b"
+        progress={progress}
+        height={7}
+        onLoaderFinished={() => setProgress(0)}
+      />
+
       <button type="button" className="text-2xl" onClick={handleClick}>
         Tripper
       </button>
