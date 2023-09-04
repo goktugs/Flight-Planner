@@ -25,12 +25,12 @@ import { useToast } from "@/components/ui/use-toast";
 import { useTranslation } from "react-i18next";
 
 export default function FlightSearch() {
-  const [isTripType, setIsTripType] = useState<boolean>(false);
   const [departureDate, setDepartureDate] = useState<Date | undefined>();
   const [returnDate, setReturnDate] = useState<Date | undefined>();
   const [depAirport, setDepAirport] = useState<IAirport | undefined>();
   const [arrAirport, setArrAirport] = useState<IAirport | undefined>();
   const { t } = useTranslation();
+  const [isTripType, setIsTripType] = useState<boolean>(false);
 
   const { toast } = useToast();
 
@@ -57,22 +57,18 @@ export default function FlightSearch() {
     e.preventDefault();
 
     if (isTripType) {
-      // Round trip seçili ise
-      fetch(
-        `${import.meta.env.VITE_PROD_URL}/api/postGetFlightsForRoundTrip/`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            departureDate,
-            returnDate,
-            depAirport,
-            arrAirport,
-          }),
-        }
-      )
+      fetch(`${import.meta.env.VITE_PROD_URL}/api/getFlightsForRoundTrip`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          departureDate,
+          returnDate,
+          depAirport,
+          arrAirport,
+        }),
+      })
         .then((res) => res.json())
         .then((res) => {
           if (res.error) {

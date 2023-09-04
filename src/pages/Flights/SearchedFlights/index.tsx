@@ -19,13 +19,14 @@ export default function SearchedFlights() {
 
   const [filteredFlights, setFilteredFlights] = useState(flights);
 
+  console.log("f", filteredFlights);
+
   const { t } = useTranslation();
 
   useEffect(() => {
     let filteredFlightsCopy = [];
 
     if (flights && flights.length > 0) {
-      // Veriler mevcutsa filtrelemeyi yap
       filteredFlightsCopy = [...flights];
 
       if (selectedAirlines && selectedAirlines.length > 0) {
