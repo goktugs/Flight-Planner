@@ -1,6 +1,6 @@
 # Flight Plannner
 
-> :warning: **I'M ON FREE TIER**: Sometimes airlines autocomplete box takes too long. Please refresh page
+> :warning: **I'M ON FREE TIER**: Sometimes autocomplete box takes too long time to show airlines. Please refresh page
 
 
 The project displays the flights it receives from the backend on the frontend. Flights can be selected and sorted. Also site have few languages like English and Turkish
