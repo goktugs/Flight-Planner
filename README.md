@@ -6,9 +6,9 @@ Beside site have responsiveness
 
 Few Photo
 
-![https://flightplanner-fe.onrender.com/](https://prnt.sc/0PlJ6dCa3IKN "")
+![Screenshot_2](https://github.com/goktugs/Flight-Planner/assets/86847572/ba492522-ee2e-4e72-a36b-f52a6255a60b)
 
-[![Mobile](https://prnt.sc/4UcS0n1--EBk)](Mobile)
+![Screenshot_1](https://github.com/goktugs/Flight-Planner/assets/86847572/131a1c0d-224a-4633-9c8f-7b0c096528c1)
 
 ## To Run
 
@@ -33,7 +33,10 @@ Then
 Finally
 
 ```bash
+
   yarn dev
+
+
 ```
 
 ## API Usage
