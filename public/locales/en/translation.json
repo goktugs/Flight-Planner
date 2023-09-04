@@ -11,10 +11,10 @@
   "trip": "Trip",
   "discover": "Discover",
   "oneWay": "One way",
-  "roundTrip": "Round trip",
   "whyus": "Why us",
   "tripPlanning": "Trip planning",
   "honestPrices": "Honest prices",
+  "tripFlight": "Trip Flights",
   "support": "Support",
   "popularQ": "Popular questions",
   "frequentlyAskedQuestions": "Frequently asked questions",
@@ -30,5 +30,6 @@
   "or": "or",
   "changeFilter": "Change filter queries",
   "noFlightsText": "Because the flights have tons of variations and there are fake data prepared by artificial intelligence, even if there are 2167 flights, sometimes we cannot find a flight for you. Please contact Atatürk Airport (ISL) and Sabiha Gökçen Airport (SAW) and 05-09-2023. Select the date range from 27-09-2023.",
-  "flightLen": "Flight length"
+  "flightLen": "Flight length",
+  "roundTrip": "Round trip"
 }

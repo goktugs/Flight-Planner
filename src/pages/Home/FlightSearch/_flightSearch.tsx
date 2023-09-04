@@ -18,19 +18,20 @@ import logo from "/logo.gif";
 import { useQuery } from "react-query";
 import SearchTop from "./_searchTop";
 import { AutoComplete } from "@/components/autoComplete";
-import { IAirport } from "../../../types/fligthSearch";
+import { IAirport } from "../../../types/airportTypes";
 import { useNavigate } from "react-router-dom";
 import { useFlightStore } from "@/store/flightSlice";
 import { useToast } from "@/components/ui/use-toast";
 import { useTranslation } from "react-i18next";
+import { useRoundTripStore } from "@/store/roundTripSlice";
 
 export default function FlightSearch() {
-  const [isTripType, setIsTripType] = useState<boolean>(false);
   const [departureDate, setDepartureDate] = useState<Date | undefined>();
   const [returnDate, setReturnDate] = useState<Date | undefined>();
   const [depAirport, setDepAirport] = useState<IAirport | undefined>();
   const [arrAirport, setArrAirport] = useState<IAirport | undefined>();
   const { t } = useTranslation();
+  const [isTripType, setIsTripType] = useState<boolean>(false);
 
   const { toast } = useToast();
 
@@ -57,22 +58,18 @@ export default function FlightSearch() {
     e.preventDefault();
 
     if (isTripType) {
-      // Round trip seçili ise
-      fetch(
-        `${import.meta.env.VITE_PROD_URL}/api/postGetFlightsForRoundTrip/`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            departureDate,
-            returnDate,
-            depAirport,
-            arrAirport,
-          }),
-        }
-      )
+      fetch(`${import.meta.env.VITE_PROD_URL}/api/getFlightsForRoundTrip`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          departureDate,
+          returnDate,
+          depAirport,
+          arrAirport,
+        }),
+      })
         .then((res) => res.json())
         .then((res) => {
           if (res.error) {
@@ -82,8 +79,11 @@ export default function FlightSearch() {
               variant: "destructive",
             });
           } else {
-            useFlightStore.setState({ flights: res });
-            navigate("/flights", { state: { targetId: "flightsSection" } });
+            useFlightStore.setState({ flights: [] });
+            useRoundTripStore.setState({ roundTripFlights: res });
+            navigate("/tripflights", {
+              state: { targetId: "flightsSection" },
+            });
           }
         });
     } else {
@@ -107,6 +107,7 @@ export default function FlightSearch() {
               variant: "destructive",
             });
           } else {
+            useRoundTripStore.setState({ roundTripFlights: [] });
             useFlightStore.setState({ flights: res });
             navigate("/flights", { state: { targetId: "flightsSection" } });
           }
